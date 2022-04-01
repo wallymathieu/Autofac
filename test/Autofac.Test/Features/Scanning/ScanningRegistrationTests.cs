@@ -206,6 +206,17 @@ public class ScanningRegistrationTests
     }
 
     [Fact]
+    public void AsClosedTypesOfShouldNotRegisterSelf()
+    {
+        var cb = new ContainerBuilder();
+        cb.RegisterAssemblyTypes(typeof(ICloseCommand).GetTypeInfo().Assembly)
+            .AsClosedTypesOf(typeof(ICommand<>));
+        var c = cb.Build();
+
+        c.AssertNotRegistered<CloseCommand>();
+    }
+
+    [Fact]
     public void AsSelfExposesConcreteTypeAsService()
     {
         var cb = new ContainerBuilder();
